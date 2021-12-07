@@ -1,0 +1,12 @@
+name: 'Setup Advanced Installer'
+description: 'Set up the Advanced Installer tool.'
+author: 'Jozef Izso'
+branding:
+  icon: play-circle
+  color: blue
+inputs: 
+  version:
+    description: 'Advanced Installer version to use. Example: 18.3'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
