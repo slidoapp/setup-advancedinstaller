@@ -6096,6 +6096,7 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let version = core.getInput('version');
+            let license = core.getInput('license');
             let toolCacheDir = _getToolCacheDirectory();
             core.info(`Downloading Advanced Installer release ${version}`);
             let downloadFile = path.join(_getTempDirectory(), uuid.v4(), 'advinst.msi');
@@ -6123,10 +6124,30 @@ function run() {
             core.exportVariable('ADVANCEDINSTALLER_ROOT', binPath);
             core.addPath(binPath);
             core.info(`Successfully installed Advanced Installer ${version}`);
+            yield registerLicense(binPath, license);
         }
         catch (error) {
             core.setFailed(error.message);
         }
+    });
+}
+function registerLicense(binPath, license) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!license) {
+            core.debug('No license key was provided.');
+            return;
+        }
+        let regCommand = path.join(binPath, 'AdvancedInstaller.com');
+        let args = [
+            '/RegisterCI',
+            license
+        ];
+        core.info('Registering Advanced Installer license.');
+        let exitCode = yield exec.exec(regCommand, args);
+        if (exitCode != 0) {
+            throw new Error(`Failed to register Advanced Installer license. Exit code ${exitCode}.`);
+        }
+        core.info('Advanced Installer license was registered.');
     });
 }
 function _getToolCacheDirectory() {

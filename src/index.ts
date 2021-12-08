@@ -8,6 +8,7 @@ import * as uuid from 'uuid';
 async function run() {
   try {
     let version = core.getInput('version');
+    let license = core.getInput('license');
     let toolCacheDir = _getToolCacheDirectory();
 
     core.info(`Downloading Advanced Installer release ${version}`);
@@ -44,12 +45,36 @@ async function run() {
     core.addPath(binPath);
 
     core.info(`Successfully installed Advanced Installer ${version}`);
+
+    await registerLicense(binPath, license);
+
   } catch (error: any) {
     core.setFailed(error.message);
   }
 }
 
- function _getToolCacheDirectory(): string {
+async function registerLicense(binPath: string, license: string) {
+  if (!license) {
+    core.debug('No license key was provided.');
+    return;
+  }
+
+  let regCommand = path.join(binPath, 'AdvancedInstaller.com');
+  let args = [
+    '/RegisterCI',
+    license
+  ];
+
+  core.info('Registering Advanced Installer license.');
+  let exitCode = await exec.exec(regCommand, args);
+
+  if (exitCode != 0) {
+    throw new Error(`Failed to register Advanced Installer license. Exit code ${exitCode}.`);
+  }
+  core.info('Advanced Installer license was registered.');
+}
+
+function _getToolCacheDirectory(): string {
   const cacheDirectory = process.env['RUNNER_TOOL_CACHE'] || '';
   return cacheDirectory;
 }
