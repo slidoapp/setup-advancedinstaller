@@ -8,7 +8,7 @@ import * as uuid from 'uuid';
 async function run() {
   try {
     let version = core.getInput('version');
-    let toolsPath = _getToolCacheDirectory();
+    let toolCacheDir = _getToolCacheDirectory();
 
     core.info(`Downloading Advanced Installer release ${version}`);
 
@@ -20,7 +20,7 @@ async function run() {
     let downloadPath = await tc.downloadTool(url, downloadFile);
     core.debug(`Downloaded installer from ${url}`);
 
-    let targetPath = `${toolsPath}\\advinst`;
+    let targetPath = `${toolCacheDir}\\advinst`;
     let logFile = `${_getTempDirectory()}\\advinst_install.log`;
 
     let args = [
@@ -38,9 +38,10 @@ async function run() {
       throw new Error(`Failed to install Advanced Installer. Exit code ${exitCode}.`);
     }
 
+    let binPath = path.join(targetPath, 'bin\\x86');
     core.debug(`Configuring paths with Advanced Installer`);
-    core.exportVariable('ADVANCEDINSTALLER_ROOT', targetPath);
-    core.addPath(targetPath);
+    core.exportVariable('ADVANCEDINSTALLER_ROOT', binPath);
+    core.addPath(binPath);
 
     core.info(`Successfully installed Advanced Installer ${version}`);
   } catch (error: any) {
