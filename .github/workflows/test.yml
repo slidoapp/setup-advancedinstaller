@@ -36,3 +36,20 @@ jobs:
         with:
           version: ${{ matrix.versions }}
       - run: AdvancedInstaller.com /help
+      
+  test-license:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [windows-2022]
+        versions:
+          - '18.3'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Advanced Installer
+        continue-on-error: true
+        uses: ./
+        with:
+          version: ${{ matrix.versions }}
+          license: 'dummy_license_key'

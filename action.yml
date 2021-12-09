@@ -7,6 +7,8 @@ branding:
 inputs: 
   version:
     description: 'Advanced Installer version to use. Example: 18.3'
+  license:
+    description: 'Advanced Installer license key. Use secrets to pass the key securely.'
 runs:
   using: 'node12'
   main: 'dist/index.js'

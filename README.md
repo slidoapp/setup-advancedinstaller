@@ -14,7 +14,8 @@ steps:
 - uses: slidoapp/setup-advancedinstaller@v1
   with:
     version: '18.3'
-- run: advinst.exe project.aip
+    license: ${{ secrets.ADVINST_LICENSE_KEY }}
+- run: AdvancedInstaller.com /help
 ```
 
 ## License
