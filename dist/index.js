@@ -6096,14 +6096,14 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let version = core.getInput('version');
-            let toolsPath = _getToolCacheDirectory();
+            let toolCacheDir = _getToolCacheDirectory();
             core.info(`Downloading Advanced Installer release ${version}`);
             let downloadFile = path.join(_getTempDirectory(), uuid.v4(), 'advinst.msi');
             yield io.mkdirP(path.dirname(downloadFile));
             let url = `https://www.advancedinstaller.com/downloads/${version}/advinst.msi`;
             let downloadPath = yield tc.downloadTool(url, downloadFile);
             core.debug(`Downloaded installer from ${url}`);
-            let targetPath = `${toolsPath}\\advinst`;
+            let targetPath = `${toolCacheDir}\\advinst`;
             let logFile = `${_getTempDirectory()}\\advinst_install.log`;
             let args = [
                 '/a',
@@ -6118,9 +6118,10 @@ function run() {
             if (exitCode != 0) {
                 throw new Error(`Failed to install Advanced Installer. Exit code ${exitCode}.`);
             }
+            let binPath = path.join(targetPath, 'bin\\x86');
             core.debug(`Configuring paths with Advanced Installer`);
-            core.exportVariable('ADVANCEDINSTALLER_ROOT', targetPath);
-            core.addPath(targetPath);
+            core.exportVariable('ADVANCEDINSTALLER_ROOT', binPath);
+            core.addPath(binPath);
             core.info(`Successfully installed Advanced Installer ${version}`);
         }
         catch (error) {
