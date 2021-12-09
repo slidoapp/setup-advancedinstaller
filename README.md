@@ -11,7 +11,7 @@ Basic:
 ```yaml
 steps:
 - uses: actions/checkout@v2
-- uses: slidoapp/setup-advancedinstaller@v1
+- uses: slidoapp/setup-advancedinstaller@v2
   with:
     version: '18.3'
     license: ${{ secrets.ADVINST_LICENSE_KEY }}
