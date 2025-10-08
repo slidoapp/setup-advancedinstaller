@@ -1,1 +1,7 @@
-* @sli-do/team-presentations
+# setup-advancedinstaller project code owners
+
+# Source code is owned by @slidoapp/team-presentations team
+* @DominikPalo @jozefizso @m-kovac @filipbodor 
+
+# CODEOWNERS definitions are owned by admins from @slidoapp/team-presentations-admins team
+.github/CODEOWNERS @DominikPalo @jozefizso
